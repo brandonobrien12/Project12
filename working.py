@@ -1,7 +1,7 @@
 from flask import Flask
 from prometheus_client import Counter, generate_latest
 from prometheus_client.core import CollectorRegistry
-import requests
+
 
 app = Flask(__name__)
 registry = CollectorRegistry()
