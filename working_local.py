@@ -1,4 +1,5 @@
 from flask import Flask
+import creds
 
 app = Flask(__name__)
 
@@ -21,8 +22,8 @@ def trigger():
     custom_metric.labels(endpoint='trigger').inc()
 
     #nba api 
-    response = requests.get('https://api.sportradar.com/nba/trial/v8/en/seasons/2022/REG/leaders.json?api_key=hkj7nnf4rcbez8kpjeubctjn')
-
+    response = requests.get('https://api.sportradar.com/nba/trial/v8/en/league/injuries.json?{creds.api_key}')
+    
     return response.json(), response.status_code
 
 if __name__ == '__main__':

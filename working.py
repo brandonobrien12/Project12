@@ -1,10 +1,10 @@
 from flask import Flask
 from prometheus_client import Counter, generate_latest
 from prometheus_client.core import CollectorRegistry
-
+import creds
 
 app = Flask(__name__)
-registry = CollectorRegistry()
+#registry = CollectorRegistry()
 
 # Define your metrics
 health_check_metric = Counter('app_healthcheck', 'App Healthcheck Metrics', ['status'], registry=registry)
@@ -30,9 +30,12 @@ def trigger():
     custom_metric.labels(endpoint='trigger').inc()
 
     #nba api 
-    response = requests.get('https://api.sportradar.com/nba/trial/v8/en/seasons/2022/REG/leaders.json?api_key=hkj7nnf4rcbez8kpjeubctjn')
+   
+    response = requests.get('https://api.sportradar.com/nba/trial/v8/en/league/injuries.json?{creds.api_key}')
+    
 
     return response.json(), response.status_code
+    print(api_key)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
