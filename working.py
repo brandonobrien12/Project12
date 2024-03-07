@@ -1,27 +1,33 @@
-from flask import Flask
-from prometheus_client import Counter, generate_latest
-from prometheus_client.core import CollectorRegistry
+from flask import Flask, jsonify
+from prometheus_client import start_http_server, Counter
 import creds
 
 app = Flask(__name__)
-#registry = CollectorRegistry()
+
+#Initialize Prometheus metrics registry
+REQUEST_COUNT = Counter('request_count', 'App Request Count', ['method', 'endpoint', 'http_status'])
+
 
 # Define your metrics
-health_check_metric = Counter('app_healthcheck', 'App Healthcheck Metrics', ['status'], registry=registry)
-custom_metric = Counter('custom_metric', 'Custom Metric', ['endpoint'], registry=registry)
+#health_check_metric = Counter('app_healthcheck', 'App Healthcheck Metrics', ['status'], registry=registry)
+#custom_metric = Counter('custom_metric', 'Custom Metric', ['endpoint'], registry=registry)
 
 @app.route('/')
 def index():
-    return 'API check status'
+    return jsonify(message="You are on the index page. Use /health /metrics /nbastats"), 200
 
 @app.route('/health')
-def health_check():
-   health_check_metric.labels(status='OK').inc()
-   return ('I am healthy 200'), 200
+#def health_check():
+   #health_check_metric.labels(status='OK').inc()
+   #return ('I am healthy 200'), 200
+def health():
+    return jsonify(message="I'm healthy"), 200
 
 @app.route('/metrics')
 def metrics():
-    return generate_latest(registry), 200
+    #return generate_latest(registry), 200
+    REQUEST_COUNT.labels(method='GET', endpoint='/metrics', http_status='200').inc()
+    return str(REQUEST_COUNT)
 
 # was not sure if you wanted an actual app so i made nba stats
 @app.route('/nbastats')
@@ -38,4 +44,7 @@ def trigger():
     print(api_key)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    # Start Prometheus metrics endpoint
+    start_http_server(8000)
+    # Run the Flask application
+    app.run(host='0.0.0.0', port=5000)

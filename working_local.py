@@ -14,7 +14,7 @@ def health():
 @app.route('/metrics')
 def metrics():
     # Logic to gather and format metrics data goes here
-    return 'Metrics data', 200
+    return 'Metrics data it is a 200', 200
 
 @app.route('/nbastats')
 def trigger():
