@@ -66,14 +66,22 @@ python working_local.py
 ```bash
 
 Complete on docker:
-docker build -t bobuckets/hey-python-flask:latest . 
+  docker build -t bobuckets/hey-python-flask:latest . 
 
-docker container run -d -p 5000:5000 bobuckets/hey-python-flask:latest
+  docker container run -d -p 5000:5000 bobuckets/hey-python-flask:latest
 
-docker container ls
-  
+  docker container ls
+
+pull docker image
+  docker pull prom/prometheus
+
+run prometheus
+ docker run -p 9090:9090 bobuckets/hey-python-flask
+
 ADD Prometheus
-  docker run -d -p 5000:5000 --bobuckets/hey-python-flask:latest prometheus prom/prometheus
+  docker run -d --name prometheus -p 9090:9090 -v /Project12-main/prometheus.yml prom/prometheus
+
+  
 
 Add Grafana
 docker run -d -p 5000:5000 --bobuckets/hey-python-flask:latest grafana grafana/grafana
