@@ -1,14 +1,8 @@
-provider "aws" {
-  region = "us-east-2a" 
-  
+terraform{
+required_providers {
+  aws = {
+    source  = "hashicorp/aws"
+    version = "5.42.0"
+  }
 }
-
-resource "aws_instance" "instance1"{
-
-  ami = "ami-019f9b3318b7155c5"
-  instance_type = "t2.micro"
-
-  tags ={
-    name = "ZebedeeDemo"
-  } 
 }
